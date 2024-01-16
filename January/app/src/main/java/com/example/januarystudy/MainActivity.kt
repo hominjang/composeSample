@@ -4,10 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -15,9 +12,15 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bumptech.glide.Glide
 import com.example.januarystudy.ui.theme.JanuaryStudyTheme
+import com.skydoves.landscapist.CircularReveal
+import com.skydoves.landscapist.glide.GlideImage
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +48,24 @@ fun GreetingCardView(order : Int){
             .fillMaxWidth()
             )
     {
-        Column {
-            Text(text = "Hello CardView $order")
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+
+        ) {
+
+            GlideImage(
+                imageModel = null,
+                modifier = Modifier.aspectRatio(0.8f),
+                previewPlaceholder = R.drawable.ic_launcher_foreground
+            )
+
+            Column {
+                Text(text = "Hello Compose World")
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(text = "Today hardCording Okay?")
+            }
         }
     }
 }
