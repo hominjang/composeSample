@@ -9,11 +9,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,13 +36,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             JanuaryStudyTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-//                    GreetingLazyColumn()
-                    RandomUserListView(randomUser = DummyDataProvider.userList)
-                }
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colors.background
+//                ) {
+////                    GreetingLazyColumn()
+//                    RandomUserListView(randomUser = DummyDataProvider.userList)
+//                }
+                DefaultPreview()
             }
         }
     }
@@ -118,7 +118,8 @@ fun RandomUserListView(randomUser: List<RamdomUser>){
             ) {
 
                 Row(){
-                    Box (modifier = Modifier.size(width = 100.dp, height = 100.dp )
+                    Box (modifier = Modifier
+                        .size(width = 100.dp, height = 100.dp)
                         .clip(CircleShape))
                 }
 
@@ -134,11 +135,46 @@ fun RandomUserListView(randomUser: List<RamdomUser>){
     }
 }
 
+@Composable
+fun GreetingMutable(name : String){
+    val expanded = remember {mutableStateOf(false)}
+    Card(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth(),
+        elevation = 10.dp,
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Row() {
+            Box(
+                modifier = Modifier
+                    .size(width = 100.dp, height = 100.dp)
+                    .clip(CircleShape)
+            )
+        }
+
+        Column(
+            modifier = Modifier.padding(10.dp)
+
+        ) {
+
+        }
+        Button(
+            onClick = { expanded.value = !expanded.value }
+        ) {
+            Text(if (expanded.value) name else "show more")
+        }
+
+    }
+
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     JanuaryStudyTheme {
 //        Greeting("Android")
-        GreetingLazyColumn()
+//        GreetingLazyColumn()
+        GreetingMutable("hello")
     }
 }
