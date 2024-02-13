@@ -10,10 +10,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.withFrameMillis
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -137,12 +135,21 @@ fun RandomUserListView(randomUser: List<RamdomUser>){
 
 @Composable
 fun GreetingMutable(name : String){
-    val expanded = remember {mutableStateOf(false)}
+
+    // remember 복습
+    // 상태(value) 저장하기 위해 필요한것.
+    // mutableStateOf (값) : 값 저장하기 위한 형태?
+    // remember : 값 저장할 수 있게 만드는 명령어
+    // 둘이 잘 혼합해서 사용하면 된다.
+    // tip 사용하려면 expanded.value로 써야하는데 이거 귀찮으면
+    // 생성할때 by 형태로 선언하면 쉽게 value 안붙여도 됨.
+    val expanded = remember { mutableStateOf(false) }
+    val elevationSize = if (expanded.value) 10.dp else 50.dp
     Card(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth(),
-        elevation = 10.dp,
+        elevation = elevationSize,
         shape = RoundedCornerShape(12.dp)
     ) {
         Row() {
@@ -169,12 +176,55 @@ fun GreetingMutable(name : String){
 
 }
 
+@Composable
+fun OnboardingScreen(
+    onContinueClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Welcome to the Basics Codelab!")
+        Button(
+            modifier = Modifier
+                .padding(vertical = 24.dp),
+            onClick = onContinueClicked
+        ) {
+            Text("Continue")
+        }
+    }
+
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     JanuaryStudyTheme {
 //        Greeting("Android")
 //        GreetingLazyColumn()
-        GreetingMutable("hello")
+//        GreetingMutable("hello")
+//        OnboardingScreen()
+
+        var shouldShowOnboarding by remember { mutableStateOf(true) }
+
+        if (shouldShowOnboarding) {
+            // 말 들어보니 클릭 이벤트 콜백을 하위 -> 상위로 받을 수 있게 매개 변수로 넣어주는것 같다.
+            // 이걸 상태 호이스팅이라고 함.
+            // 자식 Composable을 호출부(자식얘를 호출하는 곳)으로 끌어 올리는 것.
+
+            // 그러면 값을 어떻게 끌어올리냐?
+            // value : T 값
+            // onValueChanged: (T) -> Unit : 값이 바뀌거나 들어왔을 때, 값을 변경하도록 요청하는 함수.
+
+            // EX)
+            // onContinueClicked: () -> Unit, 클릭되었을때. shouldShowOnboarding 값이 바뀌도록.
+            OnboardingScreen(onContinueClicked = { shouldShowOnboarding = false })
+        } else {
+            Greeting("Android")
+        }
     }
 }
